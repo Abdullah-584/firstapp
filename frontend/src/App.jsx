@@ -1,302 +1,290 @@
-import { useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import "./App.css";
 
-const skills = [
+const explorer = [
   {
-    title: "Mobile Development",
-    icon: "FL",
-    items: ["Flutter", "Dart", "State Management", "Routing", "Testing"]
+    label: "portfolio.ide",
+    active: true,
+    children: [
+      "about.md",
+      "experience.md",
+      "achievements.md",
+      "projects.md",
+      "skills.md",
+      "contact.md"
+    ]
   },
   {
-    title: "Web Development",
-    icon: "WEB",
-    items: ["HTML", "CSS", "JavaScript", "PHP", "Laravel"]
-  },
-  {
-    title: "AI & Design",
-    icon: "AI",
-    items: ["Computer Vision", "NLP", "Figma", "Photoshop", "Illustrator"]
-  },
-  {
-    title: "Backend & Data",
-    icon: "DB",
-    items: ["Python", "SQL", "Firebase", "Data Preprocessing", "Model Evaluation"]
+    label: "assets",
+    children: ["avatar.png", "resume.pdf", "case-study.pdf"]
   }
 ];
 
-const achievements = [
-  {
-    title: "1st Place Winner",
-    detail: "Open House and Job Fair 2026 | University of Wah, Pakistan (May 19, 2026)"
-  },
-  {
-    title: "2nd Place Runner-Up",
-    detail: "6th International Student Convention & Expo 2026 | Android App Development Module"
-  },
-  {
-    title: "Multi-award-winning developer",
-    detail: "Recognized at both national and institutional levels for Android app development"
-  }
+const stats = [
+  { label: "Awards", value: "2" },
+  { label: "Internships", value: "2" },
+  { label: "Projects", value: "5+" }
 ];
 
 const experience = [
   {
-    role: "Software Engineer Intern",
+    title: "Software Engineer Intern",
     company: "Heavy Industries Taxila",
-    period: "Jun 2025 – Aug 2025",
+    period: "Jun 2025 - Aug 2025",
     detail:
-      "Designed and developed an interactive e-catalogue for the Modified Tank Al-Zarrar using Unity, improving technical documentation accessibility for engineering teams."
+      "Built an interactive e-catalogue for the Modified Tank Al-Zarrar using Unity and improved technical documentation access."
   },
   {
-    role: "UI/UX Designer",
+    title: "UI/UX Designer",
     company: "Spare Providers",
-    period: "Apr 2024 – Jun 2024",
+    period: "Apr 2024 - Jun 2024",
     detail:
-      "Designed user-centered interfaces using Figma and Adobe Illustrator, improving usability and visual consistency across deliverables."
-  }
-];
-
-const education = [
-  {
-    title: "BS Software Engineering",
-    school: "Wah Engineering College, University of Wah",
-    period: "2022 – Present"
-  },
-  {
-    title: "Intermediate (Pre-Engineering)",
-    school: "Base Group of Colleges, Wah Cantt",
-    period: "2022"
-  },
-  {
-    title: "Matriculation",
-    school: "FG Boys Public High School No. 1, Wah Cantt",
-    period: "2020"
+      "Designed user-centered interfaces in Figma and Illustrator with a focus on usability, clarity, and brand consistency."
   }
 ];
 
 const projects = [
   {
     name: "Auto Aid",
-    stack: "Flutter • Dart • Android & iOS",
-    detail:
-      "Roadside mechanic service app with real-time GPS location, service booking, and push notifications. Winner at University of Wah Open House & Job Fair 2026."
+    stack: "Flutter • Dart • Android/iOS",
+    detail: "Roadside mechanic booking app with GPS, booking flow, and push notifications."
   },
   {
-    name: "Violence & Weapon Detection System",
+    name: "Violence & Weapon Detection",
     stack: "Python • CV • Deep Learning",
-    detail:
-      "Real-time detection system using deep learning object detection models for surveillance and public safety applications."
+    detail: "Real-time detection system for surveillance and public safety workflows."
   },
   {
     name: "CV Craft",
-    stack: "Flutter • Dart • Android & iOS",
-    detail:
-      "Cross-platform resume builder app with multiple templates, real-time preview, and PDF export functionality."
-  },
-  {
-    name: "E-Catalogue for Modified Tank Al-Zarrar",
-    stack: "Unity • HIT Project",
-    detail:
-      "Interactive digital catalogue for technical components of the Al-Zarrar tank, deployed for engineering personnel at Heavy Industries Taxila."
+    stack: "Flutter • Dart",
+    detail: "Resume builder with templates, live preview, and PDF export."
   },
   {
     name: "Awam Connect — KP",
-    stack: "Flutter • Dart • Firebase",
-    detail:
-      "Civic engagement platform featuring in-app voting, an admin dashboard for vote monitoring, and a citizen complaint portal."
+    stack: "Flutter • Firebase",
+    detail: "Civic engagement app with vote monitoring and complaint portal."
   }
 ];
 
+const skills = [
+  "Flutter", "Dart", "TypeScript", "JavaScript", "Python", "Figma", "SQL", "Firebase"
+];
+
 function App() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
+  const reduceMotion = useReducedMotion();
 
-    const revealItems = document.querySelectorAll(".reveal");
-    revealItems.forEach(item => observer.observe(item));
+  const panel = {
+    hidden: { opacity: 0, y: reduceMotion ? 0 : 18 },
+    visible: { opacity: 1, y: 0 }
+  };
 
-    return () => observer.disconnect();
-  }, []);
+  const stagger = {
+    hidden: {},
+    visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.06, delayChildren: 0.02 } }
+  };
 
   return (
-    <div className="page-shell">
-      <header className="topbar">
-        <a className="brand" href="#hero">
-          muhammad<span>.</span>abdullah
-        </a>
-        <nav className="nav-links" aria-label="Main navigation">
-          <a href="#about">About</a>
-          <a href="#achievements">Achievements</a>
-          <a href="#experience">Experience</a>
-          <a href="#work">Projects</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <a className="topbar-cta" href="#contact">
-          Hire me
-        </a>
-      </header>
+    <div className="ide-shell">
+      <motion.header
+        className="ide-topbar"
+        initial={reduceMotion ? false : { opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
+        <div className="window-controls" aria-hidden="true">
+          <span className="dot close" />
+          <span className="dot min" />
+          <span className="dot max" />
+        </div>
+        <div className="title-group">
+          <span className="workspace-title">Muhammad Abdullah / portfolio.ide</span>
+          <span className="workspace-subtitle">IDE portfolio workspace</span>
+        </div>
+        <div className="topbar-actions">
+          <span>Run</span>
+          <span>Preview</span>
+          <span>Deploy</span>
+        </div>
+      </motion.header>
 
-      <main>
-        <section id="hero" className="hero">
-          <div className="hero-grid">
-            <div className="reveal">
-              <p className="eyebrow">Software Engineering Student • Flutter • Full Stack</p>
-              <h1>
-                Muhammad Abdullah
-                <span>building apps that solve real problems.</span>
-              </h1>
-              <p className="hero-copy">
-                Motivated Software Engineering student with hands-on experience in Flutter mobile development,
-                UI/UX design, computer vision, and full-stack web development. Multi-award-winning developer
-                with proven delivery in internships, competitions, and academic projects.
-              </p>
-              <div className="hero-actions">
-                <a href="#work" className="btn btn-primary">
-                  View projects
-                </a>
-                <a href="#contact" className="btn btn-secondary">
-                  Contact me
-                </a>
-              </div>
+      <div className="ide-layout">
+        <motion.aside className="ide-sidebar panel" initial="hidden" animate="visible" variants={stagger}>
+          <motion.div className="panel-section" variants={panel}>
+            <p className="panel-label">Explorer</p>
+            <div className="explorer-tree">
+              {explorer.map(folder => (
+                <div className="explorer-folder" key={folder.label}>
+                  <div className={folder.active ? "folder-row active" : "folder-row"}>
+                    <span className="folder-caret">▸</span>
+                    <span>{folder.label}</span>
+                  </div>
+                  <div className="file-list">
+                    {folder.children.map(file => (
+                      <div className={file === "about.md" ? "file-row active" : "file-row"} key={file}>
+                        <span className="file-icon">▣</span>
+                        <span>{file}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
+          </motion.div>
 
-            <aside className="code-card reveal reveal-delay-1" aria-label="Code preview card">
-              <div className="code-header">
-                <div className="dots" aria-hidden="true">
-                  <span className="dot red" />
-                  <span className="dot yellow" />
-                  <span className="dot green" />
+          <motion.div className="panel-section" variants={panel}>
+            <p className="panel-label">Quick Stats</p>
+            <div className="stats-stack">
+              {stats.map(item => (
+                <div className="mini-stat" key={item.label}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
                 </div>
-                <span className="code-file">profile/summary.dart</span>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div className="panel-section" variants={panel}>
+            <p className="panel-label">Shortcuts</p>
+            <div className="shortcut-list">
+              <span>Ctrl + P</span>
+              <span>Cmd + Shift + D</span>
+              <span>Ctrl + `</span>
+            </div>
+          </motion.div>
+        </motion.aside>
+
+        <div className="ide-main-column">
+          <motion.section className="editor-wrap panel" initial="hidden" animate="visible" variants={stagger}>
+            <motion.div className="tab-bar" variants={panel}>
+              <div className="tab active">about.md</div>
+              <div className="tab">projects.md</div>
+              <div className="tab">contact.md</div>
+            </motion.div>
+
+            <motion.div className="editor-toolbar" variants={panel}>
+              <div className="toolbar-breadcrumbs">
+                <span>portfolio</span>
+                <span>/</span>
+                <span>about.md</span>
               </div>
-              <pre className="code-body">
-                <code>{`class Profile {
-  final String name = "Muhammad Abdullah";
-  final String focus = "Flutter, UI/UX, CV, Full Stack";
-  final String location = "Wah Cantt, Pakistan";
+              <div className="toolbar-state">Editing</div>
+            </motion.div>
 
-  final List<String> highlights = [
-    "1st Place Winner - Open House and Job Fair 2026",
-    "Runner-Up - 6th International Student Convention & Expo 2026",
-    "Intern at Heavy Industries Taxila"
-  ];
-}`}</code>
-              </pre>
-            </aside>
-          </div>
-        </section>
-
-        <section id="about" className="about reveal">
-          <p className="section-label">Background</p>
-          <h2>Professional summary.</h2>
-          <p>
-            Motivated Software Engineering student with hands-on experience in Flutter mobile development,
-            UI/UX design, computer vision, and full-stack web development. Proven ability to deliver in
-            real-world internship and competitive academic environments. Eager to contribute to innovative tech teams.
-          </p>
-        </section>
-
-        <section id="achievements" className="reveal reveal-delay-1">
-          <p className="section-label">Key achievements</p>
-          <div className="card-grid">
-            {achievements.map(item => (
-              <article className="info-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.detail}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="experience" className="reveal reveal-delay-2">
-          <p className="section-label">Professional experience</p>
-          <div className="timeline">
-            {experience.map(item => (
-              <article className="timeline-item" key={item.role + item.company}>
-                <div className="timeline-marker" aria-hidden="true" />
-                <div>
-                  <p className="timeline-period">{item.period}</p>
-                  <h3>{item.role}</h3>
-                  <p className="timeline-company">{item.company}</p>
-                  <p>{item.detail}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="skills reveal reveal-delay-1" aria-label="Skills">
-          {skills.map(category => (
-            <article className="skill-card" key={category.title}>
-              <div className="skill-top">
-                <span className="skill-icon" aria-hidden="true">
-                  {category.icon}
-                </span>
-                <h3>{category.title}</h3>
-              </div>
-              <ul>
-                {category.items.map(item => (
-                  <li key={item}>{item}</li>
+            <motion.div className="editor-pane" variants={panel}>
+              <div className="editor-gutter" aria-hidden="true">
+                {Array.from({ length: 18 }, (_, index) => (
+                  <span key={index}>{index + 1}</span>
                 ))}
-              </ul>
-            </article>
-          ))}
-        </section>
+              </div>
+              <div className="editor-content">
+                <div className="code-comment">// Muhammad Abdullah — Software Engineering student</div>
+                <div>
+                  <span className="code-keyword">const</span> <span className="code-name">profile</span> = {'{'}
+                </div>
+                <div className="indent-1">
+                  <span className="code-prop">name</span>: <span className="code-string">"Muhammad Abdullah"</span>,
+                </div>
+                <div className="indent-1">
+                  <span className="code-prop">focus</span>: <span className="code-string">"Flutter, AI, Full Stack"</span>,
+                </div>
+                <div className="indent-1">
+                  <span className="code-prop">location</span>: <span className="code-string">"Wah Cantt, Pakistan"</span>,
+                </div>
+                <div className="indent-1">
+                  <span className="code-prop">summary</span>: <span className="code-string">"Award-winning developer with real internship experience."</span>
+                </div>
+                <div>{'}'}</div>
 
-        <section id="work" className="projects reveal reveal-delay-2">
-          <p className="section-label">Projects</p>
-          <h2>Work I have built.</h2>
-          <p>
-            A selection of mobile, computer vision, and civic-tech projects built during internships,
-            competitions, and academic work.
-          </p>
-          <div className="project-grid">
-            {projects.map(project => (
-              <article className="project-card" key={project.name}>
-                <p className="project-stack-line">{project.stack}</p>
-                <h3>{project.name}</h3>
-                <p>{project.detail}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+                <div className="editor-section-card">
+                  <div className="section-card-head">
+                    <span>Professional Experience</span>
+                    <span>02 entries</span>
+                  </div>
+                  {experience.map(item => (
+                    <div className="section-item" key={item.company}>
+                      <div className="section-item-title">{item.title}</div>
+                      <div className="section-item-meta">
+                        {item.company} · {item.period}
+                      </div>
+                      <div className="section-item-detail">{item.detail}</div>
+                    </div>
+                  ))}
+                </div>
 
-        <section className="reveal reveal-delay-2">
-          <p className="section-label">Education</p>
-          <div className="card-grid education-grid">
-            {education.map(item => (
-              <article className="info-card" key={item.title + item.school}>
-                <h3>{item.title}</h3>
-                <p className="timeline-company">{item.school}</p>
-                <p>{item.period}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+                <div className="editor-section-card">
+                  <div className="section-card-head">
+                    <span>Featured Projects</span>
+                    <span>04 entries</span>
+                  </div>
+                  <div className="project-grid ide-grid">
+                    {projects.map(project => (
+                      <motion.div
+                        className="project-card ide-project"
+                        key={project.name}
+                        whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="project-title-row">
+                          <span>{project.name}</span>
+                          <span className="project-stack">{project.stack}</span>
+                        </div>
+                        <p>{project.detail}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.section>
 
-        <section id="contact" className="contact reveal reveal-delay-3">
-          <p className="section-label">Get in touch</p>
-          <h2>Let&apos;s build something useful.</h2>
-          <p>
-            Open to freelance work, internships, and full-time opportunities.
-          </p>
-          <div className="contact-links" aria-label="Contact methods">
-            <a href="mailto:chabdullah1472@gmail.com">chabdullah1472@gmail.com</a>
-            <a href="tel:+923443511891">+92 344 3511891</a>
-            <span className="contact-chip">Wah Cantt, Pakistan</span>
+          <div className="bottom-grid">
+            <motion.section className="panel terminal-panel" initial="hidden" animate="visible" variants={panel}>
+              <div className="terminal-head">
+                <span>TERMINAL</span>
+                <span>bash</span>
+              </div>
+              <div className="terminal-body">
+                <div><span className="terminal-prompt">muhammad@portfolio</span> build --profile</div>
+                <div>✔ UI shell compiled</div>
+                <div>✔ Motion layer enabled</div>
+                <div>✔ Dark IDE layout ready</div>
+                <div className="terminal-cursor">▌</div>
+              </div>
+            </motion.section>
+
+            <motion.section className="panel inspector-panel" initial="hidden" animate="visible" variants={panel}>
+              <p className="panel-label">Inspector</p>
+              <div className="inspector-card">
+                <span className="inspector-key">Status</span>
+                <strong>Open for internships</strong>
+              </div>
+              <div className="inspector-card">
+                <span className="inspector-key">Awards</span>
+                <strong>1st place · 2nd place</strong>
+              </div>
+              <div className="inspector-card">
+                <span className="inspector-key">Email</span>
+                <strong>chabdullah1472@gmail.com</strong>
+              </div>
+              <div className="skills-cloud">
+                {skills.map(skill => (
+                  <span key={skill}>{skill}</span>
+                ))}
+              </div>
+            </motion.section>
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
+
+      <footer className="status-bar">
+        <span>Ln 1, Col 1</span>
+        <span>Spaces: 2</span>
+        <span>UTF-8</span>
+        <span>Framer Motion</span>
+        <span>Ready</span>
+      </footer>
     </div>
   );
 }
 
-export default App; 
+export default App;
